@@ -1,0 +1,8 @@
+gradio
+crewai
+openai
+requests
+pydantic
+typing
+crewai_tools
+PyPDF2
