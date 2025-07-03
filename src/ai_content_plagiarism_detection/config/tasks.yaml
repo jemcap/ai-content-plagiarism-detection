@@ -28,31 +28,25 @@ text_analyzer:
 
 similarity_checker:
   description: >
-    Conduct exhaustive multi-source similarity detection across diverse online repositories 
-    including academic databases (PubMed, IEEE, ACM Digital Library), publication archives, 
-    preprint servers, and web content using advanced comparison algorithms. Deploy sophisticated 
-    text matching techniques including exact phrase matching, semantic similarity scoring, 
-    paraphrasing detection, and cross-lingual plagiarism identification. Implement advanced 
-    similarity detection methods including cosine similarity on TF-IDF vectors, BERT-based 
-    semantic embeddings, fuzzy string matching algorithms, and n-gram overlap analysis. Detect 
-    sophisticated plagiarism techniques such as synonym substitution, sentence reordering, 
-    paraphrasing, translation-based plagiarism, and idea plagiarism through conceptual mapping. 
-    Generate detailed similarity reports with precise percentage matches, confidence scores, 
-    granular source attribution, exact match locations, and structural similarity assessments. 
-    Document all discovered sources with complete metadata and flag potential plagiarism issues 
-    with severity classifications and evidence-based reasoning.
+    Conduct thorough similarity detection across online repositories to identify potential 
+    plagiarism. For each analyzed text segment, you must find and document the exact source 
+    URL where similar content appears. It is critical that every flagged piece of content is 
+    explicitly linked to its specific source URL - this direct mapping between content and 
+    source is essential. Use exact phrase matching, semantic similarity scoring, and 
+    paraphrasing detection techniques. Generate similarity reports with precise percentage 
+    matches for each detected segment, always including the complete and accurate source URL 
+    for each match. For every potential match found, document the exact text segment from the 
+    input document, the matching text from the source, the specific URL where it was found, 
+    and the similarity percentage. Organize these findings in a clear tabular format to ensure 
+    direct traceability between each flagged segment and its source.
   expected_output: >
-    A comprehensive markdown report containing: (1) Executive summary with overall similarity 
-    percentage and risk assessment, (2) Detailed similarity matrix with confidence scores for 
-    each text segment, (3) Source documentation including URLs, publication dates, authors, 
-    and accessibility status, (4) Exact match analysis with precise location mapping and 
-    percentage overlap, (5) Paraphrasing detection results with semantic similarity scores, 
-    (6) Cross-lingual plagiarism findings if applicable, (7) Severity classifications (minor, 
-    moderate, severe) with evidence-based justifications, (8) Citation gap analysis identifying 
-    missing attributions, (9) Structural similarity assessment comparing argument flow and 
-    organization, (10) Visual similarity mappings and comparative analysis charts, (11) 
-    Plagiarism technique identification (synonym substitution, reordering, etc.), (12) 
-    Comprehensive bibliography of all detected sources with credibility assessments.
+    A focused markdown report containing: (1) Brief executive summary with overall similarity 
+    percentage, (2) A clear content-to-source mapping table with four columns: "Text from Document", 
+    "Matching Source Text", "Source URL", and "Similarity Percentage", (3) For each detected 
+    instance, the exact text from the uploaded document that was flagged as potentially plagiarized, 
+    (4) The matching text found at the source, (5) The complete and specific URL where each match 
+    was found (ensuring direct traceability), (6) The calculated similarity percentage for each 
+    text segment match, (7) A simple list of all source URLs referenced in the report.
   context:
     - text_analyzer
   agent: similarity_checker_agent
@@ -93,38 +87,31 @@ content_improvement:
 
 plagiarism_report:
   description: >
-    Synthesize comprehensive, professional-grade plagiarism assessment reports integrating 
-    findings from linguistic analysis, similarity detection, and content improvement recommendations 
-    into cohesive, actionable documentation. Compile detailed multi-section reports featuring 
-    executive summaries, methodology explanations, detailed findings with evidence, risk 
-    assessments, and strategic remediation roadmaps tailored to different stakeholder needs. 
-    Generate sophisticated analytical reports including quantitative similarity metrics, qualitative 
-    assessment narratives, visual similarity mappings, and comparative analysis charts. Provide 
-    comprehensive source documentation with complete bibliographic information, accessibility 
-    verification, and credibility assessments. Create detailed plagiarism taxonomies categorizing 
-    content overlap types including verbatim copying, close paraphrasing, structural imitation, 
-    idea appropriation, and improper attribution. Develop risk-stratified recommendations with 
-    priority matrices, implementation timelines, and success metrics. Include academic integrity 
-    guidance, institutional policy compliance assessments, and legal risk evaluations where 
-    applicable with clear, jargon-free explanations suitable for diverse audiences.
+    Create a clear, straightforward plagiarism assessment report that focuses on practical, 
+    actionable information. The report must include a simple executive summary with an overall 
+    plagiarism score and key findings. Most importantly, for every detected instance of potential 
+    plagiarism, provide a direct mapping between the specific content and its exact source URL. 
+    
+    Each flagged text segment must be explicitly linked to its corresponding source, showing:
+    1) The exact text that was flagged
+    2) The precise URL where this content was found
+    3) The similarity percentage for this specific match
+    
+    Present this information in a clear, tabular format that makes it easy to see which parts 
+    of the document need attention and where the similar content originated from. Include basic 
+    recommendations for addressing each flagged section. Keep the language accessible and 
+    straightforward, avoiding unnecessary jargon or overly complex explanations.
   expected_output: >
-    A comprehensive markdown report containing: (1) Executive summary with overall plagiarism 
-    risk assessment and key findings overview, and the overall or total score for plagiarism, (2) Methodology section explaining analysis 
-    techniques and detection algorithms used, (3) Detailed findings section with evidence 
-    documentation and similarity breakdowns, (4) Plagiarism taxonomy with categorized overlap 
-    types and severity classifications, (5) Quantitative metrics including confidence intervals 
-    and statistical significance measures, (6) Visual representations including similarity 
-    heat maps, source distribution charts, and risk assessment matrices, (7) Complete source 
-    bibliography with credibility ratings and accessibility status, (8) Risk-stratified 
-    recommendations with priority levels and implementation timelines, (9) Academic integrity 
-    compliance assessment with institutional policy alignment, (10) Legal risk evaluation 
-    with potential implications and mitigation strategies, (11) Success metrics and progress 
-    tracking indicators for remediation efforts, (12) Stakeholder-specific sections tailored 
-    for students, educators, researchers, and administrators, (13) Evidence preservation 
-    documentation for potential academic review processes, (14) Quality assurance validation 
-    and reliability assessments for all findings.
+    A clear, concise markdown report containing: (1) Executive summary with an overall plagiarism 
+    score as a percentage and brief key findings, (2) A content-to-source mapping table with 
+    columns for: "Flagged Text", "Source URL", "Similarity Percentage", and "Recommendation", 
+    (3) For each flagged segment, the exact text that was detected as potentially plagiarized, 
+    (4) The specific and complete URL where each flagged text segment was found, ensuring direct 
+    traceability, (5) Simple, actionable recommendations for addressing each instance of potential 
+    plagiarism, (6) A brief overall assessment of the document's originality, and (7) A simple 
+    bibliography listing all source URLs referenced in the report.
   context:
-    - content_improvement
     - similarity_checker
+    - content_improvement
   agent: plagiarism_report_agent
   output_file: output/plagiarism_report.md
