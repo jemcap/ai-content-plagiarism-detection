@@ -1,7 +1,8 @@
 from datetime import datetime
+import os
 
 
-def format_report(report_content: str, filename: str = "Unknown") -> str:
+def format_report(report_content: str, filename: str = "Unknown", output_dir: str = None) -> str:
     """Simple formatter to make reports more readable."""
 
     # Add a nice header
@@ -11,10 +12,17 @@ def format_report(report_content: str, filename: str = "Unknown") -> str:
 **Document:** {filename}  
 **Generated:** {datetime.now().strftime('%B %d, %Y at %I:%M %p')}  
 **Status:** Analysis Complete
-
----
-
 """
+    
+    # Always add report ID - generate one if not provided
+    if output_dir:
+        report_id = os.path.basename(output_dir)
+    else:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        report_id = f"{timestamp}_unknown_source"
+    
+    header += f"**Report ID:** {report_id}  \n"
+    header += "\n---\n\n"
 
     content = report_content
     # Make percentages bold

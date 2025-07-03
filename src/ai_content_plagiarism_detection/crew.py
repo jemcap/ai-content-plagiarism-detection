@@ -3,7 +3,8 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai_tools import SerperDevTool
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Dict, Any
+import os
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
@@ -84,3 +85,20 @@ class AiContentPlagiarismDetection():
             verbose=True,
             # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )
+        
+    def update_output_paths(self, output_dir: str):
+        """Update all task output paths to use the provided output directory"""
+        if not output_dir or not os.path.exists(output_dir):
+            print(f"Warning: Output directory '{output_dir}' does not exist.")
+            os.makedirs(output_dir, exist_ok=True)
+            
+        for task in self.tasks:
+            if hasattr(task, 'output_file') and task.output_file:
+                # Replace placeholder or extract filename from existing path
+                if "__DYNAMIC_PATH__" in task.output_file:
+                    task.output_file = task.output_file.replace("__DYNAMIC_PATH__", output_dir)
+                else:
+                    filename = os.path.basename(task.output_file)
+                    task.output_file = os.path.join(output_dir, filename)
+                    
+                print(f"Updated task '{task.name}' output path: {task.output_file}")

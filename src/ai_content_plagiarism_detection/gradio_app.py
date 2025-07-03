@@ -1,6 +1,8 @@
 import gradio as gr
 import os
+import uuid
 from pathlib import Path
+from datetime import datetime
 
 from .crew import AiContentPlagiarismDetection
 from .utils.file_processor import extract_text_from_file
@@ -25,22 +27,61 @@ def analyze_uploaded_file(file):
         return f"Error processing file: {str(e)}"
 
     try:
-        inputs = {"input": text_content, "file_name": os.path.basename(file.name)}
+        # Create a unique output directory for this analysis
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        file_basename = os.path.basename(file.name).split('.')[0]
+        unique_id = str(uuid.uuid4())[:8]
+        output_dir = f"output/{timestamp}_{file_basename}_{unique_id}"
+        
+        # Ensure the output directory exists
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Track the current analysis
+        with open("output/last_analysis.txt", "w") as status_file:
+            status_info = {
+                "timestamp": timestamp,
+                "filename": os.path.basename(file.name),
+                "output_dir": output_dir
+            }
+            status_file.write(str(status_info))
+        
+        # Define output paths for this analysis
+        text_segments_path = f"{output_dir}/text_segments.json"
+        similarity_report_path = f"{output_dir}/similarity_report.md"
+        plagiarism_report_path = f"{output_dir}/plagiarism_report.md"
+        
+        print(f"Analysis output directory: {output_dir}")
+        print(f"Plagiarism report will be saved to: {plagiarism_report_path}")
 
-        crew = AiContentPlagiarismDetection().crew()
+        # Update the inputs with the output directory
+        inputs = {
+            "input": text_content, 
+            "file_name": os.path.basename(file.name),
+            "output_dir": output_dir
+        }
+        
+        # Create and configure the crew
+        crew_instance = AiContentPlagiarismDetection()
+        crew = crew_instance.crew()
+        
+        # Update all task output paths for this analysis using the new method
+        crew_instance.update_output_paths(output_dir)
+        
         result = crew.kickoff(inputs=inputs)
 
-        report_path = Path("output/plagiarism_report.md")
-        if report_path.exists():
-            with open(report_path, "r", encoding="utf-8") as report_file:
+        # First check if the report exists at the expected path
+        if Path(plagiarism_report_path).exists():
+            with open(plagiarism_report_path, "r", encoding="utf-8") as report_file:
                 report_content = report_file.read()
             formatted_report = format_report(
-                report_content, os.path.basename(file.name)
+                report_content, 
+                os.path.basename(file.name),
+                output_dir  # Pass the output directory to the formatter
             )
             return formatted_report
         else:
             return (
-                "Plagiarism report not found. Please ensure the crew ran successfully."
+                f"Plagiarism report not found at {plagiarism_report_path}. Please ensure the crew ran successfully."
             )
     except Exception as e:
         return f"An error occurred while running the crew: {str(e)}"
@@ -155,7 +196,7 @@ def create_app():
         clear_btn.click(
             fn=lambda: (
                 None,
-                "Upload a document and click 'Analyze Document' to see the plagiarism analysis results here.",
+                "Upload a document and click 'Analyse Document' to see the plagiarism analysis results here.",
             ),
             outputs=[file_input, output_report],
         )
@@ -166,8 +207,15 @@ def create_app():
 # Launch function
 def launch_app():
     """Launch the Gradio app."""
+    # Ensure output directory exists
+    os.makedirs("output", exist_ok=True)
+    
     app = create_app()
-    app.launch(server_name="0.0.0.0", server_port=7860, share=False)
+    app.launch(
+        server_name="0.0.0.0", 
+        server_port=7860, 
+        share=False
+    )
 
 
 # if __name__ == "__main__":

@@ -43,6 +43,27 @@ This example, unmodified, will run the create a `report.md` file with the output
 
 The ai-content-plagiarism-detection Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
 
+## Features
+
+### Unique Report Generation
+
+Each document analysis creates a unique report in its own directory, preventing any overlap between different analyses. The system:
+
+- Creates a timestamped and unique output directory for each file upload
+- Ensures that output paths are correctly updated for all tasks
+- Includes a unique report ID in each report for traceability
+- Properly handles file serving to display the correct report for each analysis
+
+This ensures that when users upload multiple files in sequence, each analysis is completely independent and reports are not mixed up.
+
+### Gradio Web Interface
+
+The system includes a user-friendly web interface built with Gradio, allowing users to:
+- Upload text and PDF documents
+- Analyze documents for potential plagiarism
+- View formatted plagiarism reports with clear source attribution
+- Reset the interface between analyses
+
 ## Support
 
 For support, questions, or feedback regarding the AiContentPlagiarismDetection Crew or crewAI.

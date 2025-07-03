@@ -24,7 +24,7 @@ text_analyzer:
     classifications, (7) Contextual embeddings and semantic vectors for each text segment, 
     (8) Structural analysis including paragraph cohesion scores and thematic transitions.
   agent: text_analyzer_agent
-  output_file: output/text_segments.json
+  output_file: "__DYNAMIC_PATH__/text_segments.json"
 
 similarity_checker:
   description: >
@@ -50,37 +50,45 @@ similarity_checker:
   context:
     - text_analyzer
   agent: similarity_checker_agent
-  output_file: output/similarity_report.md
+  output_file: "__DYNAMIC_PATH__/similarity_report.md"
 
 content_improvement:
   description: >
     Analyze comprehensive similarity reports and develop strategic, multi-faceted recommendations 
-    for content enhancement and originality restoration. Provide detailed, actionable guidance 
-    for rephrasing problematic sections while preserving core message, intent, and academic rigor. 
-    Develop sophisticated rewriting strategies addressing different similarity types including 
-    direct copying, close paraphrasing, structural mimicking, and conceptual overlap. Create 
-    targeted improvement recommendations including sentence-level restructuring, vocabulary 
-    diversification, argument reorganization, and narrative flow enhancement. Suggest alternative 
-    phrasing options, synonyms, and linguistic variations while maintaining technical accuracy 
-    and domain-specific terminology. Provide guidance on proper citation integration, quotation 
-    usage, and attribution strategies. Develop comprehensive content enhancement plans including 
-    structural improvements, rhetorical strengthening, clarity optimization, and originality 
-    enhancement techniques. Offer specific before-and-after transformation examples and creative 
-    approaches to presenting similar ideas uniquely while maintaining audience engagement and 
-    academic standards.
+      for content enhancement and originality restoration. Provide detailed, actionable guidance 
+      for rephrasing problematic sections while preserving core message, intent, and academic rigor. 
+      Develop sophisticated rewriting strategies addressing different similarity types including 
+      direct copying, close paraphrasing, structural mimicking, and conceptual overlap. Create 
+      targeted improvement recommendations including sentence-level restructuring, vocabulary 
+      diversification, argument reorganization, and narrative flow enhancement. Suggest alternative 
+      phrasing options, synonyms, and linguistic variations while maintaining technical accuracy 
+      and domain-specific terminology. Provide guidance on proper citation integration, quotation 
+      usage, and attribution strategies. Develop comprehensive content enhancement plans including 
+      structural improvements, rhetorical strengthening, clarity optimization, and originality 
+      enhancement techniques. Offer specific before-and-after transformation examples and creative 
+      approaches to presenting similar ideas uniquely while maintaining audience engagement and 
+      academic standards. Generate a prioritized list of specific content amendments targeting 
+      high-similarity segments, including exact text replacements, sentence restructuring options, 
+      paragraph reordering suggestions, and strategic paraphrasing alternatives designed to 
+      systematically reduce the overall plagiarism score while preserving content quality and 
+      meaning integrity.
   expected_output: >
     A detailed JSON document containing: (1) Strategic improvement roadmap with prioritized 
-    action items and implementation timeline, (2) Section-by-section rewriting recommendations 
-    with specific alternative phrasings and structural modifications, (3) Vocabulary enhancement 
-    suggestions including synonym alternatives and technical term replacements, (4) Citation 
-    integration strategies with proper attribution formats and quotation guidelines, (5) 
-    Before-and-after transformation examples demonstrating originality enhancement techniques, 
-    (6) Structural reorganization proposals including argument flow improvements and narrative 
-    restructuring, (7) Quality assurance metrics and improvement tracking indicators, (8) 
-    Risk mitigation strategies for high-similarity content areas, (9) Creative expression 
-    alternatives for presenting similar concepts uniquely, (10) Academic integrity compliance 
-    checklist with institutional policy alignment, (11) Audience engagement optimization 
-    recommendations, (12) Technical accuracy validation guidelines for domain-specific content.
+      action items and implementation timeline, (2) Section-by-section rewriting recommendations 
+      with specific alternative phrasings and structural modifications, (3) Vocabulary enhancement 
+      suggestions including synonym alternatives and technical term replacements, (4) Citation 
+      integration strategies with proper attribution formats and quotation guidelines, (5) 
+      Before-and-after transformation examples demonstrating originality enhancement techniques, 
+      (6) Structural reorganization proposals including argument flow improvements and narrative 
+      restructuring, (7) Quality assurance metrics and improvement tracking indicators, (8) 
+      Risk mitigation strategies for high-similarity content areas, (9) Creative expression 
+      alternatives for presenting similar concepts uniquely, (10) Academic integrity compliance 
+      checklist with institutional policy alignment, (11) Audience engagement optimization 
+      recommendations, (12) Technical accuracy validation guidelines for domain-specific content,
+      (13) Alternative phrases table with columns for "Original Plagiarized Text", "Alternative 
+      Phrase Option 1", "Alternative Phrase Option 2", "Alternative Phrase Option 3", and 
+      "Recommended Solution", providing multiple rewriting options for each detected plagiarized 
+      segment to facilitate content originality restoration.
   context:
     - similarity_checker
   agent: content_improvement_agent
@@ -103,15 +111,18 @@ plagiarism_report:
     straightforward, avoiding unnecessary jargon or overly complex explanations.
   expected_output: >
     A clear, concise markdown report containing: (1) Executive summary with an overall plagiarism 
-    score as a percentage and brief key findings, (2) A content-to-source mapping table with 
-    columns for: "Flagged Text", "Source URL", "Similarity Percentage", and "Recommendation", 
-    (3) For each flagged segment, the exact text that was detected as potentially plagiarized, 
-    (4) The specific and complete URL where each flagged text segment was found, ensuring direct 
-    traceability, (5) Simple, actionable recommendations for addressing each instance of potential 
-    plagiarism, (6) A brief overall assessment of the document's originality, and (7) A simple 
-    bibliography listing all source URLs referenced in the report.
+      score as a percentage and brief key findings, (2) A content-to-source mapping table with 
+      columns for: "Flagged Text", "Source URL", "Similarity Percentage", and "Recommendation", 
+      (3) For each flagged segment, the exact text that was detected as potentially plagiarized, 
+      (4) The specific and complete URL where each flagged text segment was found, ensuring direct 
+      traceability, (5) Simple, actionable recommendations for addressing each instance of potential 
+      plagiarism, (6) A brief overall assessment of the document's originality, (7) A simple 
+      bibliography listing all source URLs referenced in the report, and (8) An alternative 
+      solutions table with columns for "Original Flagged Text", "Alternative Solution 1", 
+      "Alternative Solution 2", "Alternative Solution 3", and "Recommended Approach", providing 
+      multiple rewriting options for each detected plagiarized segment.
   context:
     - similarity_checker
     - content_improvement
   agent: plagiarism_report_agent
-  output_file: output/plagiarism_report.md
+  output_file: "__DYNAMIC_PATH__/plagiarism_report.md"
